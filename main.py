@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import math
 
-class CatenaryApp:
+class Krzywa:
     def __init__(self, root):
         self.root = root
         self.root.title("Wizualizacja krzywej łańcuchowej")
@@ -20,28 +20,23 @@ class CatenaryApp:
         self.distance.grid(row=0, column=1, padx=5, pady=5)
         self.distance.insert(0, "10")
 
-        ttk.Label(param_frame, text="Wysokość lewej podpory (m):").grid(row=1, column=0, padx=5, pady=5)
-        self.height_left = ttk.Entry(param_frame)
-        self.height_left.grid(row=1, column=1, padx=5, pady=5)
-        self.height_left.insert(0, "0")
+        ttk.Label(param_frame, text="Wysokość podpór (m):").grid(row=1, column=0, padx=5, pady=5)
+        self.height = ttk.Entry(param_frame)
+        self.height.grid(row=1, column=1, padx=5, pady=5)
+        self.height.insert(0, "0")
 
-        ttk.Label(param_frame, text="Wysokość prawej podpory (m):").grid(row=2, column=0, padx=5, pady=5)
-        self.height_right = ttk.Entry(param_frame)
-        self.height_right.grid(row=2, column=1, padx=5, pady=5)
-        self.height_right.insert(0, "0")
-
-        ttk.Label(param_frame, text="Długość łańcucha (m):").grid(row=3, column=0, padx=5, pady=5)
+        ttk.Label(param_frame, text="Długość łańcucha (m):").grid(row=2, column=0, padx=5, pady=5)
         self.chain_length = ttk.Entry(param_frame)
-        self.chain_length.grid(row=3, column=1, padx=5, pady=5)
+        self.chain_length.grid(row=2, column=1, padx=5, pady=5)
         self.chain_length.insert(0, "12")
 
-        ttk.Label(param_frame, text="Waga liny (kg/m):").grid(row=4, column=0, padx=5, pady=5)
+        ttk.Label(param_frame, text="Waga liny (kg/m):").grid(row=3, column=0, padx=5, pady=5)
         self.chain_weight = ttk.Entry(param_frame)
-        self.chain_weight.grid(row=4, column=1, padx=5, pady=5)
+        self.chain_weight.grid(row=3, column=1, padx=5, pady=5)
         self.chain_weight.insert(0, "1")
 
         # Przycisk do generowania wykresu
-        ttk.Button(param_frame, text="Generuj wykres", command=self.plot_catenary).grid(row=5, column=0, columnspan=2, pady=10)
+        ttk.Button(param_frame, text="Generuj wykres", command=self.plot).grid(row=4, column=0, columnspan=2, pady=10)
 
         # Ramka na wykres
         self.plot_frame = ttk.Frame(root)
@@ -57,17 +52,16 @@ class CatenaryApp:
         root.columnconfigure(0, weight=1)
         root.rowconfigure(1, weight=1)
 
-    def plot_catenary(self):
+    def plot(self):
         try:
             # Pobieranie parametrów
             L = float(self.distance.get())
-            h1 = float(self.height_left.get())
-            h2 = float(self.height_right.get())
+            h = float(self.height.get())
             s = float(self.chain_length.get())
             w = float(self.chain_weight.get())
 
             # Sprawdzenie, czy długość łańcucha jest wystarczająca
-            if s <= math.sqrt(L**2 + (h2-h1)**2):
+            if s <= L:
                 messagebox.showerror("Błąd", "Długość łańcucha jest zbyt mała!")
                 return
 
@@ -89,23 +83,18 @@ class CatenaryApp:
 
             # Generowanie punktów krzywej
             x = np.linspace(0, L, 1000)
-            y = a * np.cosh((x - L / 2) / a) + (h1 + h2) / 2 - a * np.cosh(L / (2 * a))
+            y = a * np.cosh((x - L / 2) / a) - a * np.cosh(L / (2 * a)) + h
 
             # Wyznaczenie równania krzywej
-            equation_text = f"y = {a:.4f} * cosh((x - {L/2:.4f}) / {a:.4f}) + {(h1 + h2)/2 - a * np.cosh(L / (2 * a)):.4f}"
+            equation_text = f"y = {a:.4f} * cosh((x - {L/2:.4f}) / {a:.4f}) - {a * np.cosh(L / (2 * a)):.4f} + {h:.4f}"
             self.equation_label.config(text=equation_text)
 
             # Tworzenie wykresu
             plt.clf()
             fig = plt.gcf()
             plt.plot(x, y, 'b-', label='Krzywa łańcuchowa')
-            plt.plot([0, L], [h1, h2], 'r--', label='Linia między podporami')
-            plt.scatter([0, L], [h1, h2], color='red', s=100, label='Podpory')
-
-            # Obliczanie sił w kilku punktach na krzywej
-            forces = [(xi, w * math.sqrt(1 + (np.sinh((xi - L / 2) / a))**2)) for xi in np.linspace(0, L, 5)]
-            for xi, force in forces:
-                plt.text(xi, a * np.cosh((xi - L / 2) / a) + (h1 + h2) / 2 - a * np.cosh(L / (2 * a)) - 0.5, f"{force:.2f}N", color="green")
+            plt.plot([0, L], [h, h], 'r--', label='Linia między podporami')
+            plt.scatter([0, L], [h, h], color='red', s=100, label='Podpory')
 
             plt.grid(True)
             plt.legend()
@@ -129,5 +118,5 @@ class CatenaryApp:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    app = CatenaryApp(root)
+    app = Krzywa(root)
     root.mainloop()
