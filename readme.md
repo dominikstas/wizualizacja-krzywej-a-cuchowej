@@ -6,7 +6,8 @@ Program służy do wizualizacji krzywej łańcuchowej (catenary curve) w formie 
 ## Teoria  
 Krzywa łańcuchowa opisuje kształt, jaki przybiera lina lub łańcuch zawieszony na dwóch podporach, pod wpływem swojego ciężaru. Kształt ten można matematycznie wyrazić za pomocą funkcji hiperbolicznej cosinus:  
 
-\[ y = a \cdot \cosh\left(\frac{x - L/2}{a}\right) - a \cdot \cosh\left(\frac{L}{2a}\right) + h \]  
+y = a * cosh((x - L/2) / a) - a * cosh(L / (2a)) + h
+
 
 gdzie:  
 - \(a\) - parametr krzywej zależny od długości łańcucha i odległości między podporami,  
