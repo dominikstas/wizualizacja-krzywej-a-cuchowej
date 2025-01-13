@@ -1,3 +1,6 @@
+# Dominik Stasiak
+# Fizyka Techniczna - semestr 1
+
 # Wizualizacja Krzywej Łańcuchowej  
 
 ## Opis projektu  
