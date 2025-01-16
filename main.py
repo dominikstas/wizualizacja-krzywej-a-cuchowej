@@ -1,9 +1,9 @@
 import tkinter as tk
 from interface import KrzywaUI
-from calculations import KrzywaCalculations
+from calculations import Calculations
 
 if __name__ == "__main__":
     root = tk.Tk()
-    calculations = KrzywaCalculations()
+    calculations = Calculations()
     app = KrzywaUI(root, calculations)
     root.mainloop()

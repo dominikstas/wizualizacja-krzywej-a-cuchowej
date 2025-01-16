@@ -1,6 +1,6 @@
 import numpy as np
 
-class KrzywaCalculations:
+class Calculations:
     def find_a(self, L, s):
         def func(a_guess):
             return 2 * a_guess * np.sinh(L / (2 * a_guess)) - s

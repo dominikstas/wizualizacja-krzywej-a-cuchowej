@@ -1,4 +1,4 @@
-# Importy niezbędnych bibliotek
+# Importy bibliotek
 import tkinter as tk
 from tkinter import ttk, messagebox
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -8,7 +8,6 @@ import numpy as np
 
 class KrzywaUI:
     def __init__(self, root, calculations):
-        # Inicjalizacja głównego okna i obiektu z obliczeniami
         self.root = root
         self.calculations = calculations
         self.root.title("Wizualizacja krzywej łańcuchowej")
